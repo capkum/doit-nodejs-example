@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-var app = require('../app6');
+var app = require('../app7');
 var debug = require('debug')('doit-express-example:server');
 var http = require('http');
 
