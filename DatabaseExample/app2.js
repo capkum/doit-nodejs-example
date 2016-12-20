@@ -69,6 +69,7 @@ var authUser = function(database, id, password, callback) {
   });
 };
 
+// login
 app.post('/process/login', function(req, res) {
   console.log('/process/login 호출됨');
   var paramId = req.param('id');
@@ -83,14 +84,18 @@ app.post('/process/login', function(req, res) {
       if (docs) {
         console.dir(docs);
 
-        res.writeHead('200', {'Content-Type': 'text/html; charset=utf8'});
+        res.writeHead('200', {
+          'Content-Type': 'text/html; charset=utf8'
+        });
         res.write('<h1>로그인 성공</h1>');
-        res.write('<div><p>사용자 아이디 : '+ paramId +' </p></div>');
-        res.write('<div><p>사용자 이름 : '+ docs[0].name+' </p></div>');
+        res.write('<div><p>사용자 아이디 : ' + paramId + ' </p></div>');
+        res.write('<div><p>사용자 이름 : ' + docs[0].name + ' </p></div>');
         res.write('<br><br><a href="/html/login.html">다시 로그인하기</a>');
         res.end();
       } else {
-        res.writeHead('200', {'Content-Type': 'text/html; charset=utf8'});
+        res.writeHead('200', {
+          'Content-Type': 'text/html; charset=utf8'
+        });
         res.write('<h1>로그인 실패</h1>');
         res.write('<div><p>사용자 아이디와 비밀번호를 확인하십시오 </p></div>');
         res.write('<br><br><a href="/html/login.html">다시 로그인하기</a>');
@@ -98,48 +103,70 @@ app.post('/process/login', function(req, res) {
       }
     });
   } else {
-    res.writeHead('200', {'Content-Type': 'text/html; charset=utf8'});
+    res.writeHead('200', {
+      'Content-Type': 'text/html; charset=utf8'
+    });
     res.write('<h2>데이터베이스 연결 실패</h2>');
     res.write('<div><p>데이터베이스에 연결 하지 못했습니다.</p></div>');
     res.end();
   }
 });
 
-// app.post('process/login', function(req, res) {
-//   console.log('/process/login 호출됨');
-  // var paramId = req.param('id');
-  // var paramPassword = req.param('password');
-  //
-  // if (database) {
-  //   authUser(database, paramId, paramPassword, function(err, docs) {
-  //     if (err) {
-  //       throw err;
-  //     }
-  //
-  //     if (docs) {
-  //       console.dir(docs);
-  //
-  //       res.writeHead('200', {'Content-Type': 'text/html; charset=utf8'});
-  //       res.write('<h1>로그인 성공</h1>');
-  //       res.write('<div><p>사용자 아이디 : '+paramId+' </p></div>');
-  //       res.write('<div><p>사용자 이름 : '+ username+' </p></div>');
-  //       res.write('<br><br><a href="/html/login.html">다시 로그인하기</a>');
-  //       res.end();
-  //     } else {
-  //       res.writeHead('200', {'Content-Type': 'text/html; charset=utf8'});
-  //       res.write('<h1>로그인 실패</h1>');
-  //       res.write('<div><p>사용자 아이디와 비밀번호를 확인하십시오 </p></div>');
-  //       res.write('<br><br><a href="/html/login.html">다시 로그인하기</a>');
-  //       res.end();
-  //     }
-  //   });
-  // } else {
-  //   res.writeHead('200', {'Content-Type': 'text/html; charset=utf8'});
-  //   res.write('<h2>데이터베이스 연결 실패</h2>');
-  //   res.write('<div><p>데이터베이스에 연결 하지 못했습니다.</p></div>');
-  //   res.end();
-  // }
-// });
+// add user in mongodb
+var addUser = function(database, id, password, name, cb) {
+  console.log('addUser 호출');
+
+  var users = database.collection('users');
+  users.insert([{
+    "id": id,
+    "password": password,
+    "name": name
+  }], function(err, result) {
+    if (err) {
+      cb(err, null);
+      return;
+    }
+
+    console.log('사용자 데이터 추가');
+    cb(null, result);
+  });
+};
+
+// add user protocol
+app.post('/process/adduser', function(req, res) {
+  console.log('/process/adduser');
+
+  var paramId = req.param('id');
+  var paramPassword = req.param('password');
+  var paramName = req.param('name');
+
+  if (database) {
+    addUser(database, paramId, paramPassword, paramName, function(err, result){
+      if (err) {
+        throw err;
+      }
+
+      if (result) {
+        console.dir(result);
+
+        res.writeHead('200', {'Content-Type': 'text/html; charset=utf8'});
+        res.write('<h2> 사용자 추가 성공</h2>');
+        res.write('<br><br><a href="/html/adduser.html">유저 추가</a>');
+        res.end();
+      } else {
+        res.writeHead('200', {'Content-Type': 'text/html; charset=utf8'});
+        res.write('<h2> 사용자 추가 실패</h2>');
+        res.end();
+      }
+    });
+  } else {
+    res.writeHead('200', {'Content-Type': 'text/html; charset=utf8'});
+    res.write('<h2> 데이터베이스 연결 실패</h2>');
+    res.write('<br><br><a href="/html/adduser.html">유저 추가</a>');
+    res.end();
+  }
+});
+
 
 var errorHandler = expressErrorHandler({
   static: {
@@ -149,27 +176,5 @@ var errorHandler = expressErrorHandler({
 
 app.use(expressErrorHandler.httpError(404));
 app.use(errorHandler);
-
-
-// app.use('/', index);
-// app.use('/users', users);
-
-// // catch 404 and forward to error handler
-// app.use(function(req, res, next) {
-//   var err = new Error('Not Found');
-//   err.status = 404;
-//   next(err);
-// });
-//
-// // error handler
-// app.use(function(err, req, res, next) {
-//   // set locals, only providing error in development
-//   res.locals.message = err.message;
-//   res.locals.error = req.app.get('env') === 'development' ? err : {};
-//
-//   // render the error page
-//   res.status(err.status || 500);
-//   res.render('error');
-// });
 
 module.exports = app;

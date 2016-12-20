@@ -13,6 +13,7 @@
     "express-error-handler": "^1.1.0",
     "express-session": "^1.14.2",
     "jade": "~1.11.0",
+    "mongodb": "^2.2.16",
     "morgan": "~1.7.0",
     "serve-favicon": "~2.3.0"
   }
