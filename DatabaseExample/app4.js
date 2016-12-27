@@ -109,7 +109,7 @@ var authUser = function(database, id, password, callback) {
     console.log('아이디[%s]로 사용자 검색 결과 ', id);
     console.dir(results);
 
-    if (results.lenght > 0) {
+    if (results.length > 0) {
       console.log('아이디 [%s], 비밀번호 [%s]가 일치하는 사용자 찾음.');
       if (results[0]._doc.password == password) {
         console.log('비밀번호 일치함');
