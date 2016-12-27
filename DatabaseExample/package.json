@@ -17,6 +17,7 @@
     "mongodb": "^2.2.16",
     "mongoose": "^4.7.4",
     "morgan": "~1.7.0",
+    "mysql": "^2.12.0",
     "serve-favicon": "~2.3.0"
   }
 }
