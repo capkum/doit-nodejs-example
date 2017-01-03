@@ -39,6 +39,7 @@ var database;
 var UserSchema;
 var UserModel;
 
+// mongodb setting
 function connectDB() {
   var databaseUrl = 'mongodb://localhost:27017/shopping';
 
@@ -53,13 +54,14 @@ function connectDB() {
   database.on('disconnected', connectDB);
 }
 
+// mongodb connect
 connectDB();
 
+// set schema
 function createUserSchema() {
   UserSchema = require('./database/user_schema').createSchema(mongoose);
   UserModel = mongoose.model('users2', UserSchema);
-
-  users.init(database, UserSchema, UserModel);
+  require('./commonModule/user_dao').init(database, UserSchema, UserModel);
   console.log('users model 정의함');
 }
 
