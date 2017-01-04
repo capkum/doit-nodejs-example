@@ -1,14 +1,4 @@
-// var database;
-// var UserSchema;
-// var UserModel;
-//
-// var init = function(db, schema, model) {
-//   console.log('/commonModule/user_dao/ init호출됨');
-//
-//   database = db;
-//   UserSchema = schema;
-//   UserModel = model;
-// };
+
 
 // login
 var login = function(req, res) {

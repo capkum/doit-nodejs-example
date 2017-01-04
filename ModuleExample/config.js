@@ -1,4 +1,5 @@
-var user = require('./routes/users');
+
+var path = '../commonModule/user_dao2';
 
 module.exports = {
   server_port: 3000,
@@ -10,19 +11,19 @@ module.exports = {
     modelName: 'UserModel',
   }],
   route_info: [{
-    file: './user',
+    file: path,
     path: '/process/login',
     method: 'login',
     type: 'post'
   }, {
-    file: './user',
+    file: path,
     path: '/process/adduser',
-    method: 'adduser',
+    method: 'addUser',
     type: 'post'
   }, {
-    file: './user',
+    file: path,
     path: '/process/listuser',
-    method: 'listuser',
+    method: 'userList',
     type: 'post'
   }],
 };

@@ -10,9 +10,7 @@ var mongodb = require('mongodb');
 var mongoose = require('mongoose');
 var app = express();
 var crypto = require('crypto');
-var index = require('./routes/index');
-var users = require('./routes/users2');
-var config = require('./config');
+var route_loader = require('./routes/route_loader');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -31,11 +29,7 @@ app.use(expressSession({
   saveUninitialized: true
 }));
 
-app.use('/', index);
-app.use('/users', users);
-
-var database = require('./database/database');
-database.init(app, config);
+route_loader.init(app);
 
 var errorHandler = expressErrorHandler({
   static: {
