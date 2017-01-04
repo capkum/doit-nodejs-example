@@ -1,20 +1,21 @@
-var database;
-var UserSchema;
-var UserModel;
-
-var init = function(db, schema, model) {
-  console.log('/commonModule/user_dao/ init호출됨');
-
-  database = db;
-  UserSchema = schema;
-  UserModel = model;
-};
+// var database;
+// var UserSchema;
+// var UserModel;
+//
+// var init = function(db, schema, model) {
+//   console.log('/commonModule/user_dao/ init호출됨');
+//
+//   database = db;
+//   UserSchema = schema;
+//   UserModel = model;
+// };
 
 // login
 var login = function(req, res) {
   console.log('/process/login 호출됨');
   var paramId = req.param('id');
   var paramPassword = req.param('password');
+  var database = req.app.get('database');
 
   if (database) {
     authUser(database, paramId, paramPassword, function(err, docs) {
@@ -60,9 +61,10 @@ var addUser = function(req, res) {
   var paramId = req.param('id');
   var paramPassword = req.param('password');
   var paramName = req.param('name');
+  var database = req.app.get('database');
 
   if (database) {
-    crateUser(database, paramId, paramPassword, paramName,
+    createUser(database, paramId, paramPassword, paramName, req,
       function(err, result) {
         if (err) {
           throw err;
@@ -98,6 +100,9 @@ var addUser = function(req, res) {
 // user list
 var userList = function(req, res) {
   console.log('/process/listuser 호출됨');
+  var database = req.app.get('database');
+  var UserModel = database.UserModel;
+
   if (database) {
     UserModel.findAll(function(err, results) {
       if (err) {
@@ -132,9 +137,11 @@ var userList = function(req, res) {
 };
 
 // add user in mongodb
-var crateUser = function(database, id, password, name, cb) {
+var createUser = function(database, id, password, name, req, cb) {
   console.log('addUser 호출');
+  var UserModel = req.app.get('database').UserModel;
 
+  // var user = new UserModel({
   var user = new UserModel({
     'id': id,
     'password': password,
@@ -155,6 +162,7 @@ var crateUser = function(database, id, password, name, cb) {
 // auth
 var authUser = function(database, id, password, callback) {
   console.log('authUser 호출');
+  var UserModel = database.UserModel;
 
   UserModel.findById(id, function(err, results) {
     if (err) {
@@ -192,4 +200,3 @@ var authUser = function(database, id, password, callback) {
 module.exports.login = login;
 module.exports.addUser = addUser;
 module.exports.userList = userList;
-module.exports.init = init;

@@ -11,7 +11,8 @@ var mongoose = require('mongoose');
 var app = express();
 var crypto = require('crypto');
 var index = require('./routes/index');
-var users = require('./routes/users');
+var users = require('./routes/users2');
+var config = require('./config');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -32,38 +33,9 @@ app.use(expressSession({
 
 app.use('/', index);
 app.use('/users', users);
-app.set('name', 'capkum');
 
-// mongodb connection
-var database;
-var UserSchema;
-var UserModel;
-
-// mongodb setting
-function connectDB() {
-  var databaseUrl = 'mongodb://localhost:27017/shopping';
-
-  mongoose.connect(databaseUrl);
-  database = mongoose.connection;
-  database.on('error', console.error.bind(console, 'mongoose connection  error'));
-  database.on('open', function() {
-    console.log('데이터베이스에 연결되었습니다. :' + databaseUrl);
-    createUserSchema();
-  });
-
-  database.on('disconnected', connectDB);
-}
-
-// mongodb connect
-connectDB();
-
-// set schema
-function createUserSchema() {
-  UserSchema = require('./database/user_schema').createSchema(mongoose);
-  UserModel = mongoose.model('user2', UserSchema);
-  require('./commonModule/user_dao').init(database, UserSchema, UserModel);
-  console.log('users model 정의함');
-}
+var database = require('./database/database');
+database.init(app, config);
 
 var errorHandler = expressErrorHandler({
   static: {
