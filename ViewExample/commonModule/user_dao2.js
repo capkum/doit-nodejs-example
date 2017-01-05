@@ -1,5 +1,3 @@
-
-
 // login
 var login = function(req, res) {
   console.log('/process/login 호출됨');
@@ -15,15 +13,20 @@ var login = function(req, res) {
 
       if (docs) {
         console.dir(docs);
-
         res.writeHead('200', {
           'Content-Type': 'text/html; charset=utf8'
         });
-        res.write('<h1>로그인 성공</h1>');
-        res.write('<div><p>사용자 아이디 : ' + paramId + ' </p></div>');
-        res.write('<div><p>사용자 이름 : ' + docs[0].name + ' </p></div>');
-        res.write('<br><br><a href="/html/login.html">다시 로그인하기</a>');
-        res.end();
+        var context = {
+          userid: paramId,
+          username: docs[0].name,
+        };
+        req.app.render('login_success', context, function(err, html) {
+          if (err) {
+            throw err;
+          }
+          console.log('rendered: ' + html);
+          res.end(html);
+        });
       } else {
         res.writeHead('200', {
           'Content-Type': 'text/html; charset=utf8'
