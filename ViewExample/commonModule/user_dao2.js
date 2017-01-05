@@ -69,9 +69,21 @@ var addUser = function(req, res) {
           res.writeHead('200', {
             'Content-Type': 'text/html; charset=utf8'
           });
-          res.write('<h2> 사용자 추가 성공</h2>');
-          res.write('<br><br><a href="/html/adduser.html">유저 추가</a>');
-          res.end();
+          var context = {
+            title: '사용자 추가 성공',
+          };
+          req.app.render('adduser_response', context, function(err, html) {
+            if (err) {
+              throw err;
+            }
+            res.end(html);
+           });
+
+
+
+          // res.write('<h2> 사용자 추가 성공</h2>');
+          // res.write('<br><br><a href="/html/adduser.html">유저 추가</a>');
+          // res.end();
         } else {
           res.writeHead('200', {
             'Content-Type': 'text/html; charset=utf8'
@@ -107,17 +119,21 @@ var userList = function(req, res) {
         res.writeHead('200', {
           'Content-Type': 'text/html; charset=utf8'
         });
-        res.write('<h2>사용자 리스트</h2>');
-        res.write('<div><ul>');
 
-        for (var i = 0; i < results.length; i++) {
-          var curId = results[i]._doc.id;
-          var curName = results[i]._doc.name;
-          res.write('<li>#' + i + ':' + curId + ',' + curName + '</li>');
-        }
+        var dateFormat = require('dateformat');
 
-        res.write('</ul></div>');
-        res.end();
+        var context = {
+          results: results,
+          dateFormat: dateFormat,
+        };
+
+        req.app.render('listuser_response', context, function(err, html) {
+          if (err) {
+            throw err;
+          }
+          res.end(html);
+        });
+
       } else {
         res.writeHead('200', {
           'Content-Type': 'text/html; charset=utf8'
