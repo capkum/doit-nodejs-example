@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="vieport" content="width=device-width, height=device-height,
+    initial-scale=1">
+        <link rel="stylesheet" href="../stylesheets/semantic.min.css">
+        <link rel="stylesheet" href="../stylesheets/listuser_response.css">
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
+        <script type="text/javascript" src="../javascripts/semantic.min.js"></script>
+        <title>사용자 리스트 응답</title>
+</head>
+
+<body>
+
+    <div class="container">
+        <br>
+        <div class="ui raised segment">
+            <a class="ui blue ribbon label">사용자 리스트</a>
+
+            <br><br>
+
+            <% for (var i = 0; i < results.length; i++) {
+                 var curId = results[i]._doc.id;
+                 var curName = results[i]._doc.name;
+                 var curCreated_at = results[i]._doc.created_at;
+                 var curAge = results[i]._doc.curAge;
+                 var crt_at = dateFormat(curCreated_at, "yyyy-mm-dd TT h:MM:ss  ");
+            %>
+
+              <div class="ui blue fluid card">
+                  <div class="content">
+                      <div class="header"><%= curId%></div>
+                      <div class="meta">
+                          <span class="right floated time"><%= curAge%></span>
+                          <span class="category"><%= curName%></span>
+                      </div>
+                      <div class="description">
+                          <br>
+                          <p>이것저것 내용 출력</p>
+                          <p>여기도 이것저것 출력.</p>
+                      </div>
+                  </div>
+                  <div class="bottomArea extra content">
+                      <div class="right floated author">
+                          <img class="ui avatar image" src="../images/woman.png"> <%= crt_at%>
+                      </div>
+                  </div>
+              </div>
+
+            <% } %>
+
+        </div>
+        <form id="form1" method="post" action="/process/listuser">
+          <table>
+            <tr class="row">
+              <td id="buttonContainer">
+                <input id="submitButton" class="ui primary button" type="submit" value="다시 조회" name="" />
+              </td>
+              <td id="buttonContainer">
+                <a href="/html/addUser.html" class="ui primary button"> 사용자 추가 </a>
+              </td>
+            </tr>
+          </table>
+        </form>
+    </div>
+
+</body>
+
+</html>
