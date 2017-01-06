@@ -12,7 +12,7 @@ database.init = function(app, config) {
 function connect(app, config) {
   console.log('connect() 호출됨');
   var databaseUrl = config.db_url;
-
+  mongoose.Promise = global.Promise;
   mongoose.connect(databaseUrl);
   database = mongoose.connection;
   database.on('error', console.error.bind(console, 'mongoose connection  error'));

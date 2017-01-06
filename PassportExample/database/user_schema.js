@@ -4,11 +4,9 @@ var Schema = {};
 
 Schema.createSchema = function(mongoose) {
   var UserSchema = mongoose.Schema({
-    id: {
+    email: {
       type: String,
-      required: true,
-      unigue: true,
-      'default': ''
+      'default': '',
     },
     hashed_password: {
       type: String,
@@ -23,10 +21,6 @@ Schema.createSchema = function(mongoose) {
       type: String,
       index: 'hashed',
       'default': ''
-    },
-    age: {
-      type: Number,
-      'default': -1
     },
     created_at: {
       type: Date,
@@ -83,18 +77,21 @@ Schema.createSchema = function(mongoose) {
     }
   });
 
-  UserSchema.path('id').validate(function(id) {
-    return id.length;
-  }, 'id 컬럼이 없습니다.');
-
   UserSchema.path('name').validate(function(name) {
     return name.length;
   }, 'name 컬럼이 없습니다.');
 
+  UserSchema.path('email').validate(function(email) {
+    return email.length;
+  }, 'email 칼럼의 값이 없습니다.');
 
-  UserSchema.static('findById', function(id, callback) {
+  UserSchema.path('hashed_password').validate(function(hashed_password) {
+    return hashed_password.length;
+  }, 'hashed_password 칼럼의 값이 없습니다.');
+
+  UserSchema.static('findByEmail', function(email, callback) {
     return this.find({
-      'id': id
+      'email': email
     }, callback);
   });
 
