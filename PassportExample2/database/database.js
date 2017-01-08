@@ -11,7 +11,7 @@ database.init = function(app, config) {
 // database connect
 function connect(app, config) {
   console.log('connect() 호출됨');
-  var databaseUrl = config.db_url;
+  var databaseUrl = config.db_url ;
   mongoose.Promise = global.Promise;
   mongoose.connect(databaseUrl);
   database = mongoose.connection;
