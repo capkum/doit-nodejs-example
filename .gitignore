@@ -38,6 +38,3 @@ jspm_packages
 
 # file upload directory
 uploads
-
-# config directories
-*/config.js
