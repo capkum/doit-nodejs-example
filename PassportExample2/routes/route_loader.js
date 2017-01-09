@@ -1,5 +1,5 @@
 var route_loader = {};
-var config = require('../config');
+var config = require('../config/config');
 var database = require('../database/database');
 
 route_loader.init = function(app) {

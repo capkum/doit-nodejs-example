@@ -62,6 +62,18 @@ module.exports = function(app, passport) {
     res.redirect('/');
   });
 
+  // passport facebook인증
+  app.get('/auth/facebook', passport.authenticate('facebook', {
+    scope: 'email',
+  }));
+
+  //passport facebook 인증 callback
+  app.get('/auth/facebook/callback', passport.authenticate('facebook', {
+    successRedirect: '/profile',
+    failureRedirect: '/',
+  }));
+
+
   // 로그인 여부를 알 수 있도록 하는 미들웨어
   function isLoggedIn(req, res, next) {
   	console.log('isLoggedIn 미들웨어 호출됨.');

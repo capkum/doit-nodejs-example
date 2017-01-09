@@ -10,12 +10,10 @@ Schema.createSchema = function(mongoose) {
     },
     hashed_password: {
       type: String,
-      required: true,
-      'default': ''
+      'default': '',
     },
     salt: {
       type: String,
-      required: true
     },
     name: {
       type: String,
@@ -36,6 +34,15 @@ Schema.createSchema = function(mongoose) {
       },
       'default': Date.now
     },
+    provider: {
+      type: String,
+      'default': '',
+    },
+    authToken: {
+      type: String,
+      'default': '',
+    },
+    facebook: {},
   });
 
   UserSchema
@@ -77,17 +84,17 @@ Schema.createSchema = function(mongoose) {
     }
   });
 
-  UserSchema.path('name').validate(function(name) {
-    return name.length;
-  }, 'name 컬럼이 없습니다.');
+  // UserSchema.path('name').validate(function(name) {
+  //   return name.length;
+  // }, 'name 컬럼이 없습니다.');
+  //
+  // UserSchema.path('email').validate(function(email) {
+  //   return email.length;
+  // }, 'email 칼럼의 값이 없습니다.');
 
-  UserSchema.path('email').validate(function(email) {
-    return email.length;
-  }, 'email 칼럼의 값이 없습니다.');
-
-  UserSchema.path('hashed_password').validate(function(hashed_password) {
-    return hashed_password.length;
-  }, 'hashed_password 칼럼의 값이 없습니다.');
+  // UserSchema.path('hashed_password').validate(function(hashed_password) {
+  //   return hashed_password.length;
+  // }, 'hashed_password 칼럼의 값이 없습니다.');
 
   UserSchema.static('findByEmail', function(email, callback) {
     return this.find({
@@ -98,6 +105,13 @@ Schema.createSchema = function(mongoose) {
   UserSchema.static('findAll', function(callback) {
     return this.find({}, callback);
   });
+
+  UserSchema.static('load', function(options, callback) {
+		options.select = options.select || 'name';
+	    this.findOne(options.criteria)
+	      .select(options.select)
+	      .exec(callback);
+	});
 
   console.log('UserSchema 정의함');
 
