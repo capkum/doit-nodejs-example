@@ -41,3 +41,7 @@ uploads
 
 # config
 PassportExample2/config/config.js
+
+# atom editer
+.jshintrc
+.tern-project
