@@ -8,31 +8,29 @@ var app = require('../app');
 var debug = require('debug')('moduleexample:server');
 var http = require('http');
 var config = require('../config/config');
+var socketio = require('socket.io');
 
 /**
  * Get port from environment and store in Express.
  */
 console.log('config.server_port: %d ', config.server_port);
-var port = normalizePort(process.env.PORT || 3000);
+var port = normalizePort(process.env.PORT || config.server_port);
 app.set('port', port);
 
-/**
- * Create HTTP server.
- */
-
 var server = http.createServer(app);
-
-/**
- * Listen on provided port, on all network interfaces.
- */
-
-server.listen(port);
 server.on('error', onError);
-server.on('listening', onListening);
+server.listen(port, function() {
+  console.log('서버가 시작되었습니다. 포트: ' + port);
+});
 
-/**
- * Normalize a port into a number, string, or false.
- */
+var io = socketio.listen(server);
+io.sockets.on('connection', (socket) => {
+  console.log('connection info :', socket.request.connection._peername);
+  socket.remoteAddress = socket.request.connection._peername.address;
+  socket.remotePort = socket.request.connection._peername.port;
+});
+console.log('socket.io 요청을 받을 준기가 되었습니다.');
+
 
 function normalizePort(val) {
   var port = parseInt(val, 10);

@@ -1,6 +1,6 @@
 var express = require('express');
 var path = require('path');
-var favicon = require('serve-favicon');
+// var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -11,6 +11,8 @@ var mongoose = require('mongoose');
 var app = express();
 var crypto = require('crypto');
 var route_loader = require('./routes/route_loader');
+var socketio = require('socket.io');
+var cors = require('cors');
 
 // Passport
 var passport = require('passport');
@@ -37,6 +39,9 @@ app.use(expressSession({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
+
+// cors
+app.use(cors);
 
 // 라우터와 디비연결 및 호출 모듈화
 route_loader.init(app);

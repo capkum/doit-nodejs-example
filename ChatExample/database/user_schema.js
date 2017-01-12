@@ -84,18 +84,6 @@ Schema.createSchema = function(mongoose) {
     }
   });
 
-  // UserSchema.path('name').validate(function(name) {
-  //   return name.length;
-  // }, 'name 컬럼이 없습니다.');
-  //
-  // UserSchema.path('email').validate(function(email) {
-  //   return email.length;
-  // }, 'email 칼럼의 값이 없습니다.');
-
-  // UserSchema.path('hashed_password').validate(function(hashed_password) {
-  //   return hashed_password.length;
-  // }, 'hashed_password 칼럼의 값이 없습니다.');
-
   UserSchema.static('findByEmail', function(email, callback) {
     return this.find({
       'email': email
