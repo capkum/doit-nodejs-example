@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-var app = require('../app');
+var app = require('../app2');
 var debug = require('debug')('moduleexample:server');
 var http = require('http');
 var config = require('../config/config');
@@ -24,13 +24,8 @@ server.listen(port, function() {
 });
 
 var io = socketio.listen(server);
-io.sockets.on('connection', (socket) => {
-  console.log('connection info :', socket.request.connection._peername);
-  socket.remoteAddress = socket.request.connection._peername.address;
-  socket.remotePort = socket.request.connection._peername.port;
-});
+app.socketSet(io);
 console.log('socket.io 요청을 받을 준기가 되었습니다.');
-
 
 function normalizePort(val) {
   var port = parseInt(val, 10);
