@@ -108,6 +108,19 @@ app.socketSet = io => {
       sendResponse(socket, 'login', 200, '로그인되었습니다.');
     });
 
+    // logout
+    socket.on('logout', logout => {
+      console.log('logout 이벤트를 받았습니다.');
+      console.dir(logout);
+      console.dir(login_ids);
+      delete login_ids[logout.id];
+
+      console.log('접속한 클라이언트 ID 개수: %d', Object.keys(login_ids).length);
+
+      // 응답
+      sendResponse(socket, 'logout', 200, '로그아웃 되었습니다..');
+    });
+
   });
 };
 

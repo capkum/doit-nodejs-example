@@ -61,7 +61,7 @@
         });
 
         // login
-        $('#loginButton').bind('click', function(event) {
+        $('#loginButton').bind('click', event => {
             var id = $('#idInput').val();
             var password = $('#passwordInput').val();
             var alias = $('#aliasInput').val();
@@ -89,9 +89,28 @@
             });
         });
 
+        // logout
+        $('#logoutButton').bind('click', event => {
+          var id = $('#idInput').val();
+          let output = {
+            id: id,
+          }
+          console.log('서버로 보낼 데이터: ' + JSON.stringify(output));
+
+          if (socket == undefined) {
+              alert('서버에 연겨로디어 있지 않습니다. 먼저 서버에 연결하세요.');
+              return;
+          }
+          socket.emit('logout', output);
+          socket.on('logoutResponse', logoutResponse => {
+            console.log(JSON.stringify(logoutResponse));
+            println('응답 메시지를 받았습니다. : ' + response.command);
+          });
+        });
+
 
         // messages
-        $('#sendButton').bind('click', function(event) {
+        $('#sendButton').bind('click', event => {
             var sender = $('#senderInput').val();
             var recepient = $('#recepientInput').val();
             var data = $('#dataInput').val();
