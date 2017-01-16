@@ -40,7 +40,7 @@ jspm_packages
 uploads
 
 # config
-PassportExample2/config/config.js
+*/config/config.js
 
 # atom editer
 .jshintrc
